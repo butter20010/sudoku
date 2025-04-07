@@ -1,91 +1,104 @@
 package com.games.sudoku;
 
+import java.util.Arrays;
+import java.util.Random;
+
 public class SudokuFields {
 
-    /* Array that will contain the complete solution to the board */
-    private int[][] solution;
-    /* Array that will contain ONLY the numbers initially drawn on the board and that the player can't change */
-    private int[][] initial;
-    /* Array that will contain player's numbers */
-    private int[][] player;
+  private int[][] sudoku = new int[9][9];
+  private int[][] solution = new int[9][9];
+  private int[][] player = new int[9][9];
 
-    public SudokuFields() {
-        solution = new int[][]
-                {
-                        {5,3,8,4,6,1,7,9,2},
-                        {6,9,7,3,2,5,8,1,4},
-                        {2,1,4,7,8,9,5,6,3},
-                        {9,4,1,2,7,8,6,3,5},
-                        {7,6,2,1,5,3,9,4,8},
-                        {8,5,3,9,4,6,1,2,7},
-                        {3,8,9,5,1,2,4,7,6},
-                        {4,2,6,8,9,7,3,5,1},
-                        {1,7,5,6,3,4,2,8,9}
-                };
+  private Random random = new Random();
 
-        // 0's will be rendered as empty space and will be editable by player
-        initial = new int[][]
-                {
-                        {0,0,0,4,0,0,0,9,0},
-                        {6,0,7,0,0,0,8,0,4},
-                        {0,1,0,7,0,9,0,0,3},
-                        {9,0,1,0,7,0,0,3,0},
-                        {0,0,2,0,0,0,9,0,0},
-                        {0,5,0,0,4,0,1,0,7},
-                        {3,0,0,5,0,2,0,7,0},
-                        {4,0,6,0,0,0,3,0,1},
-                        {0,7,0,0,0,4,0,0,0}
-                };
+  public void createNewSudoku() {
+    createSolution(solution);
+    sudoku = emptyCellsByDifficult("easy");
+  }
 
-        // player's array is initialized as a 9x9 full of zeroes
-        player = new int[9][9];
-    }
+  public int[][] getSudoku() {
+    return sudoku;
+  }
 
-    // returns the solution array
-    public int[][] getSolution() {
-        return solution;
-    }
-
-    // returns the initial filled-in numbers array
-    public int[][] getInitial() {
-        return initial;
-    }
-
-    // returns the player array
-    public int[][] getPlayer() {
-        return player;
-    }
-
-    // modifies a value in the player array
-    public void modifyPlayer(int val, int row, int col) {
-        if(val >=0 && val <= 9) // only values from 0 to 9 inclusive are permitted
-            player[row][col] = val;
-        else // print out an error message
-            System.out.println("Value passed to player falls out of range");
-    }
-
-    public boolean checkForSuccess() {
-        for(int row = 0; row<9; row++) {
-            for(int col = 0; col<9; col++) {
-
-                // if the value in the initial array is zero, which means
-                // the player has to input a value in the square
-                if(initial[row][col] == 0) {
-
-                    // check if the player value corresponds to the solution value
-                    // and if it doesn't:
-                    if(player[row][col] != solution[row][col]) {
-
-                        // return false, which will tell us there has been a mistake
-                        // and that is enough for us to know the player hasn't solved
-                        // the puzzle
-                        return false;
-                    }
-                }
+  private boolean createSolution(int[][] board) {
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        if (board[row][col] == 0) {
+          for (int i = 1; i <= 9; i++) {
+            int num = random.nextInt(1, 10);
+            if (isValid(board, row, col, num)) {
+              board[row][col] = num;
+              if (createSolution(board)) {
+                return true;
+              }
+              board[row][col] = 0;
             }
+          }
+          return false; // Если ни одно число не подошло, откатываемся
         }
-        // otherwise, if everything is correct, return true
-        return true;
+      }
     }
+    return true; // Если пустых клеток нет — Судоку решено
+  }
+
+  private static boolean isValid(int[][] board, int row, int col, int num) {
+    for (int i = 0; i < 9; i++) {
+      if (board[row][i] == num || board[i][col] == num ||
+              board[row - row % 3 + i / 3][col - col % 3 + i % 3] == num) {
+        return false; // Проверка строки, столбца и блока 3×3
+      }
+    }
+    return true;
+  }
+
+  private int[][] emptyCellsByDifficult(String difficulty) {
+    int[][] newSudoku = deepCopy(solution);
+    int cellsToRemove = switch (difficulty) {
+      case "easy" -> random.nextInt(36, 41);
+      case "medium" -> random.nextInt(41, 50);
+      case "hard" -> random.nextInt(50, 55);
+      case "expert" -> random.nextInt(55, 64);
+      default -> 36;
+    };
+    for (int i = 0; i < cellsToRemove; i++) {
+      newSudoku[random.nextInt(0, 9)][random.nextInt(0, 9)] = 0;
+    }
+    return newSudoku;
+  }
+
+  private int[][] deepCopy(int[][] original) {
+    int[][] copy = new int[original.length][];
+    for (int i = 0; i < original.length; i++) {
+      copy[i] = Arrays.copyOf(original[i], original[i].length);
+    }
+    return copy;
+  }
+
+
+  // returns the player array
+  public int[][] getPlayer() {
+    return player;
+  }
+
+  // modifies a value in the player array
+  public void modifyPlayer(int val, int row, int col) {
+    if (val >= 0 && val <= 9) // only values from 0 to 9 inclusive are permitted
+      player[row][col] = val;
+    else // print out an error message
+      System.out.println("Value passed to player falls out of range");
+  }
+
+  public boolean checkForSuccess() {
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        if (sudoku[row][col] == 0) {
+          if (player[row][col] != solution[row][col]) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
 
 }

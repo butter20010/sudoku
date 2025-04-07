@@ -11,11 +11,8 @@ public class CanvasDrawer {
       for (int col = 0; col < 9; col++) {
         int position_y = row * 50 + 2;
         int position_x = col * 50 + 2;
-
-        //width and height of cells
+        
         int width = 46;
-
-        //color of cells
         context.setFill(Color.WHITE);
 
         //change for rounded effect
@@ -24,17 +21,14 @@ public class CanvasDrawer {
     }
   }
 
-  public static void fillCellsByInitial(GraphicsContext context, int[][] initial) {
-    for (int row = 0; row < 9; row++) {
-      for (int col = 0; col < 9; col++) {
+  public static void fillCells(GraphicsContext context, int[][] initial, Color color) {
+    for (int row = 0; row < initial.length; row++) {
+      for (int col = 0; col < initial[row].length; col++) {
 
         int position_y = row * 50 + 30;
         int position_x = col * 50 + 20;
 
-        //color of numbers
-        context.setFill(Color.BLACK);
-
-        //font of numbers
+        context.setFill(color);
         context.setFont(new Font(20));
 
         if (initial[row][col] != 0) {
@@ -44,22 +38,16 @@ public class CanvasDrawer {
     }
   }
 
-  public static void fillCellsByPlayer(GraphicsContext context, int[][] player) {
-    for (int row = 0; row < 9; row++) {
-      for (int col = 0; col < 9; col++) {
-        int position_y = row * 50 + 30;
-        int position_x = col * 50 + 20;
+  public static void drawCellBorder(GraphicsContext context, int col, int row) {
+    context.setStroke(Color.RED);
+    context.setLineWidth(5);
+    context.strokeRoundRect(col * 50 + 2, row * 50 + 2, 46, 46, 10, 10);
+  }
 
-        //color of players numbers
-        context.setFill(Color.PURPLE);
-
-        //font of players numbers
-        context.setFont(new Font(20));
-
-        if (player[row][col] != 0) {
-          context.fillText(String.valueOf(player[row][col]), position_x, position_y);
-        }
-      }
-    }
+  public static void drawSuccess(GraphicsContext context) {
+    context.clearRect(0, 0, 450, 450);
+    context.setFill(Color.GREEN);
+    context.setFont(new Font(36));
+    context.fillText("SUCCESS!", 150, 250);
   }
 }
