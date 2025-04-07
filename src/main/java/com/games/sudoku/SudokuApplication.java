@@ -3,6 +3,7 @@ package com.games.sudoku;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +15,8 @@ public class SudokuApplication extends Application {
     Scene scene = new Scene(fxmlLoader.load(), 480, 480);
     primaryStage.setTitle("Sudoku!");
     primaryStage.setScene(scene);
+    Image icon = new Image(SudokuApplication.class.getResourceAsStream("Sudoku.jfif"));
+    primaryStage.getIcons().add(icon);
     SudokuController controller = fxmlLoader.getController();
     scene.setOnKeyPressed(controller::pressedKey);
     primaryStage.show();

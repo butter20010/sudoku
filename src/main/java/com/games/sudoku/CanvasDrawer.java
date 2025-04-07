@@ -2,6 +2,8 @@ package com.games.sudoku;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 
 public class CanvasDrawer {
@@ -43,6 +45,23 @@ public class CanvasDrawer {
     context.setLineWidth(5);
     context.strokeRoundRect(col * 50 + 2, row * 50 + 2, 46, 46, 10, 10);
   }
+
+  public static void drawBlockBorders(GraphicsContext context) {
+    context.setStroke(Paint.valueOf("#b26bae"));
+    context.setLineWidth(3);
+    context.setLineCap(StrokeLineCap.ROUND);
+
+    for (int col = 0; col <= 9; col = col + 3) {
+      double x = col * 50;
+      context.strokeLine(x, 0, x, 450);
+    }
+
+    for (int row = 0; row <= 9; row = row + 3) {
+      double y = row * 50;
+      context.strokeLine(0, y, 450, y);
+    }
+  }
+
 
   public static void drawSuccess(GraphicsContext context) {
     context.clearRect(0, 0, 450, 450);

@@ -9,11 +9,13 @@ public class SudokuFields {
   private int[][] solution = new int[9][9];
   private int[][] player = new int[9][9];
 
+  private int solutions;
+
   private Random random = new Random();
 
-  public void createNewSudoku() {
-    createSolution(solution);
-    sudoku = emptyCellsByDifficult("easy");
+  public void createNewSudoku(Difficulty difficulty) {
+    createSolution(this.solution);
+    this.sudoku = emptyCellsByDifficult(difficulty);
   }
 
   public int[][] getSudoku() {
@@ -34,34 +36,66 @@ public class SudokuFields {
               board[row][col] = 0;
             }
           }
-          return false; // Если ни одно число не подошло, откатываемся
+          return false;
         }
       }
     }
-    return true; // Если пустых клеток нет — Судоку решено
+    return true;
   }
 
   private static boolean isValid(int[][] board, int row, int col, int num) {
     for (int i = 0; i < 9; i++) {
       if (board[row][i] == num || board[i][col] == num ||
               board[row - row % 3 + i / 3][col - col % 3 + i % 3] == num) {
-        return false; // Проверка строки, столбца и блока 3×3
+        return false;
       }
     }
     return true;
   }
 
-  private int[][] emptyCellsByDifficult(String difficulty) {
+  private void solveSudoku(int[][] solvedSudoku) {
+    if (solutions > 1) {
+      return;
+    }
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            if (solvedSudoku[row][col] == 0) {
+                for (int num = 1; num <= 9; num++) {
+                    if (isValid(solvedSudoku, row, col, num)) {
+                        solvedSudoku[row][col] = num;
+                        solveSudoku(solvedSudoku);
+                        solvedSudoku[row][col] = 0;
+                    }
+                }
+                return;
+            }
+        }
+    }
+    this.solutions++;
+  }
+
+  private int[][] emptyCellsByDifficult(Difficulty difficulty) {
     int[][] newSudoku = deepCopy(solution);
     int cellsToRemove = switch (difficulty) {
-      case "easy" -> random.nextInt(36, 41);
-      case "medium" -> random.nextInt(41, 50);
-      case "hard" -> random.nextInt(50, 55);
-      case "expert" -> random.nextInt(55, 64);
-      default -> 36;
+      case EASY -> random.nextInt(36, 41);
+      case MEDIUM -> random.nextInt(41, 50);
+      case HARD -> random.nextInt(50, 55);
+      case EXPERT -> random.nextInt(55, 64);
     };
     for (int i = 0; i < cellsToRemove; i++) {
-      newSudoku[random.nextInt(0, 9)][random.nextInt(0, 9)] = 0;
+      int row = random.nextInt(0, 9);
+      int col = random.nextInt(0, 9);
+      if (newSudoku[row][col] == 0) {
+        i--;
+        continue;
+      }
+      newSudoku[row][col] = 0;
+      solutions = 0;
+      solveSudoku(deepCopy(newSudoku));
+      if (solutions > 1) {
+          newSudoku[row][col] = this.solution[row][col];
+          i--;
+      }
     }
     return newSudoku;
   }
@@ -74,17 +108,17 @@ public class SudokuFields {
     return copy;
   }
 
-
-  // returns the player array
   public int[][] getPlayer() {
     return player;
   }
 
-  // modifies a value in the player array
   public void modifyPlayer(int val, int row, int col) {
-    if (val >= 0 && val <= 9) // only values from 0 to 9 inclusive are permitted
+    if (sudoku[row][col] != 0) {
+      return;
+    }
+    if (val >= 0 && val <= 9)
       player[row][col] = val;
-    else // print out an error message
+    else
       System.out.println("Value passed to player falls out of range");
   }
 

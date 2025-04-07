@@ -31,7 +31,7 @@ public class SudokuController implements Initializable {
   public void initialize(URL url, ResourceBundle resourceBundle) {
     fields = new SudokuFields();
     GraphicsContext context = canvas.getGraphicsContext2D();
-    fields.createNewSudoku();
+    fields.createNewSudoku(Difficulty.EASY);
     drawOnCanvas(context);
   }
 
@@ -40,6 +40,7 @@ public class SudokuController implements Initializable {
     CanvasDrawer.drawEmptyCells(context);
     CanvasDrawer.fillCells(context, fields.getSudoku(), Color.BLACK);
     CanvasDrawer.drawCellBorder(context, player_selected_col, player_selected_row);
+    CanvasDrawer.drawBlockBorders(context);
     CanvasDrawer.fillCells(context, fields.getPlayer(), Color.PURPLE);
     if (fields.checkForSuccess()) {
       CanvasDrawer.drawSuccess(context);
