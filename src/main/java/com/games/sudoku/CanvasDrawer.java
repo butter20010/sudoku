@@ -13,11 +13,8 @@ public class CanvasDrawer {
       for (int col = 0; col < 9; col++) {
         int position_y = row * 50 + 2;
         int position_x = col * 50 + 2;
-        
         int width = 46;
         context.setFill(Color.WHITE);
-
-        //change for rounded effect
         context.fillRoundRect(position_x, position_y, width, width, 10, 10);
       }
     }
@@ -41,21 +38,21 @@ public class CanvasDrawer {
   }
 
   public static void drawCellBorder(GraphicsContext context, int col, int row) {
-    context.setStroke(Color.RED);
-    context.setLineWidth(5);
+    context.setStroke(Paint.valueOf("#388e3c"));
+    context.setLineWidth(4);
+    context.setLineDashes(10, 5);
     context.strokeRoundRect(col * 50 + 2, row * 50 + 2, 46, 46, 10, 10);
   }
 
   public static void drawBlockBorders(GraphicsContext context) {
-    context.setStroke(Paint.valueOf("#b26bae"));
+    context.setLineDashes();
+    context.setStroke(Paint.valueOf("#a3bfa3"));
     context.setLineWidth(3);
     context.setLineCap(StrokeLineCap.ROUND);
-
     for (int col = 0; col <= 9; col = col + 3) {
       double x = col * 50;
       context.strokeLine(x, 0, x, 450);
     }
-
     for (int row = 0; row <= 9; row = row + 3) {
       double y = row * 50;
       context.strokeLine(0, y, 450, y);

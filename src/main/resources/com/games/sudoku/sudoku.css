@@ -1,12 +1,58 @@
-#base_pane {
-	 -fx-background-color: #ead7e9;
+.base_pane {
+    -fx-background-color: #d4e8d3;
 }
 
 .button {
-	 -fx-background-color: #bdc3c7;
+    -fx-background-color: linear-gradient(to bottom, #f5f9f4, #e0f0e0);
+    -fx-text-fill: #4a5d3d;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #a2c5a3;
+    -fx-border-width: 1;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
 }
 
 .button:hover {
-	 -fx-background-color: #ecf0f1;
+    -fx-background-color: linear-gradient(to bottom, #e4f6e1, #c5e4c2);
+}
 
+.button:pressed {
+    -fx-background-color: #a2c5a3;
+    -fx-text-fill: white;
+}
+
+.menu-button {
+    -fx-background-color: linear-gradient(to bottom, #f5f9f4, #e0f0e0);
+    -fx-text-fill: #4a5d3d;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #a2c5a3;
+    -fx-border-width: 1;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+}
+
+.menu-button > .arrow-button {
+    -fx-padding: 0 0 0 0;
+}
+
+.menu-button > .label {
+    -fx-padding: 0 0 0 0;
+    -fx-text-overrun: clip;
+}
+
+.menu-item {
+    -fx-pref-width: 125px;
+    -fx-alignment: center;
+}
+
+.menu-item:focused {
+    -fx-background-color: #b6e0b3;
+    -fx-text-fill: #000000;
 }

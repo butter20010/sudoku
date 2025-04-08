@@ -3,19 +3,21 @@ package com.games.sudoku;
 import java.util.Arrays;
 import java.util.Random;
 
-public class SudokuFields {
+public class SudokuGenerator {
 
-  private int[][] sudoku = new int[9][9];
-  private int[][] solution = new int[9][9];
-  private int[][] player = new int[9][9];
+  private int[][] sudoku;
+  private int[][] solution;
+  private int[][] player;
 
   private int solutions;
 
-  private Random random = new Random();
+  private final Random random = new Random();
 
   public void createNewSudoku(Difficulty difficulty) {
+    this.solution = new int[9][9];
     createSolution(this.solution);
     this.sudoku = emptyCellsByDifficult(difficulty);
+    this.player = new int[9][9];
   }
 
   public int[][] getSudoku() {
@@ -58,18 +60,18 @@ public class SudokuFields {
       return;
     }
     for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            if (solvedSudoku[row][col] == 0) {
-                for (int num = 1; num <= 9; num++) {
-                    if (isValid(solvedSudoku, row, col, num)) {
-                        solvedSudoku[row][col] = num;
-                        solveSudoku(solvedSudoku);
-                        solvedSudoku[row][col] = 0;
-                    }
-                }
-                return;
+      for (int col = 0; col < 9; col++) {
+        if (solvedSudoku[row][col] == 0) {
+          for (int num = 1; num <= 9; num++) {
+            if (isValid(solvedSudoku, row, col, num)) {
+              solvedSudoku[row][col] = num;
+              solveSudoku(solvedSudoku);
+              solvedSudoku[row][col] = 0;
             }
+          }
+          return;
         }
+      }
     }
     this.solutions++;
   }
@@ -93,8 +95,8 @@ public class SudokuFields {
       solutions = 0;
       solveSudoku(deepCopy(newSudoku));
       if (solutions > 1) {
-          newSudoku[row][col] = this.solution[row][col];
-          i--;
+        newSudoku[row][col] = this.solution[row][col];
+        i--;
       }
     }
     return newSudoku;

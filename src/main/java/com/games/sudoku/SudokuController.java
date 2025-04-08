@@ -1,48 +1,55 @@
 package com.games.sudoku;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class SudokuController implements Initializable {
 
-  public Canvas canvas;
-
   @FXML
-  private GridPane gridPane;
+  private Canvas canvas;
+  @FXML
+  private MenuItem easy;
+  @FXML
+  private MenuItem medium;
+  @FXML
+  private MenuItem hard;
+  @FXML
+  private MenuItem expert;
+  @FXML
+  private Button hint;
+  @FXML
+  private Button newSudoku;
 
-  private Label[][] cells = new Label[9][9];
-
-  private SudokuFields fields;
+  private SudokuGenerator generator;
   private int player_selected_row;
   private int player_selected_col;
 
-
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    fields = new SudokuFields();
+    generator = new SudokuGenerator();
     GraphicsContext context = canvas.getGraphicsContext2D();
-    fields.createNewSudoku(Difficulty.EASY);
+    generator.createNewSudoku(Difficulty.EASY);
     drawOnCanvas(context);
   }
 
   public void drawOnCanvas(GraphicsContext context) {
     context.clearRect(0, 0, 450, 450);
     CanvasDrawer.drawEmptyCells(context);
-    CanvasDrawer.fillCells(context, fields.getSudoku(), Color.BLACK);
+    CanvasDrawer.fillCells(context, generator.getSudoku(), Color.BLACK);
     CanvasDrawer.drawCellBorder(context, player_selected_col, player_selected_row);
     CanvasDrawer.drawBlockBorders(context);
-    CanvasDrawer.fillCells(context, fields.getPlayer(), Color.PURPLE);
-    if (fields.checkForSuccess()) {
+    CanvasDrawer.fillCells(context, generator.getPlayer(), Color.PURPLE);
+    if (generator.checkForSuccess()) {
       CanvasDrawer.drawSuccess(context);
     }
   }
@@ -60,9 +67,29 @@ public class SudokuController implements Initializable {
 
   public void pressedKey(KeyEvent event) {
     if (event.getCode().isDigitKey()) {
-      fields.modifyPlayer(Integer.parseInt(event.getCode().getName()), player_selected_row, player_selected_col);
+      generator.modifyPlayer(Integer.parseInt(event.getCode().getName()), player_selected_row, player_selected_col);
       drawOnCanvas(canvas.getGraphicsContext2D());
     }
+  }
+
+  public void onEasyClicked() {
+    generator.createNewSudoku(Difficulty.EASY);
+    drawOnCanvas(canvas.getGraphicsContext2D());
+  }
+
+  public void onMediumClicked() {
+    generator.createNewSudoku(Difficulty.MEDIUM);
+    drawOnCanvas(canvas.getGraphicsContext2D());
+  }
+
+  public void onHardClicked() {
+    generator.createNewSudoku(Difficulty.HARD);
+    drawOnCanvas(canvas.getGraphicsContext2D());
+  }
+
+  public void onExpertClicked() {
+    generator.createNewSudoku(Difficulty.EXPERT);
+    drawOnCanvas(canvas.getGraphicsContext2D());
   }
 
 }
