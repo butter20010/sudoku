@@ -33,16 +33,18 @@ public class SudokuController implements Initializable {
   private SudokuGenerator generator;
   private int player_selected_row;
   private int player_selected_col;
+  private Difficulty difficulty;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     generator = new SudokuGenerator();
-    GraphicsContext context = canvas.getGraphicsContext2D();
-    generator.createNewSudoku(Difficulty.EASY);
-    drawOnCanvas(context);
+    difficulty = Difficulty.EASY;
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
   }
 
-  public void drawOnCanvas(GraphicsContext context) {
+  public void drawOnCanvas() {
+    GraphicsContext context = canvas.getGraphicsContext2D();
     context.clearRect(0, 0, 450, 450);
     CanvasDrawer.drawEmptyCells(context);
     CanvasDrawer.fillCells(context, generator.getSudoku(), Color.BLACK);
@@ -55,41 +57,49 @@ public class SudokuController implements Initializable {
   }
 
   public void canvasMouseClicked() {
-
     canvas.setOnMouseClicked(event -> {
       int mouse_x = (int) event.getX();
       int mouse_y = (int) event.getY();
       player_selected_row = mouse_y / 50;
       player_selected_col = mouse_x / 50;
-      drawOnCanvas(canvas.getGraphicsContext2D());
+      drawOnCanvas();
     });
   }
 
   public void pressedKey(KeyEvent event) {
     if (event.getCode().isDigitKey()) {
       generator.modifyPlayer(Integer.parseInt(event.getCode().getName()), player_selected_row, player_selected_col);
-      drawOnCanvas(canvas.getGraphicsContext2D());
+      drawOnCanvas();
     }
   }
 
   public void onEasyClicked() {
-    generator.createNewSudoku(Difficulty.EASY);
-    drawOnCanvas(canvas.getGraphicsContext2D());
+    difficulty = Difficulty.EASY;
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
   }
 
   public void onMediumClicked() {
-    generator.createNewSudoku(Difficulty.MEDIUM);
-    drawOnCanvas(canvas.getGraphicsContext2D());
+    difficulty = Difficulty.MEDIUM;
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
   }
 
   public void onHardClicked() {
-    generator.createNewSudoku(Difficulty.HARD);
-    drawOnCanvas(canvas.getGraphicsContext2D());
+    difficulty = Difficulty.HARD;
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
   }
 
   public void onExpertClicked() {
-    generator.createNewSudoku(Difficulty.EXPERT);
-    drawOnCanvas(canvas.getGraphicsContext2D());
+    difficulty = Difficulty.EXPERT;
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
+  }
+
+  public void onCreateNewClicked() {
+    generator.createNewSudoku(difficulty);
+    drawOnCanvas();
   }
 
 }

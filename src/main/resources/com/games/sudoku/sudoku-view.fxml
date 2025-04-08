@@ -14,7 +14,7 @@
     <Canvas fx:id="canvas" height="450.0" layoutX="50.0" layoutY="55.0" onMouseClicked="#canvasMouseClicked"
             width="450.0"/>
     <Button fx:id="newSudoku" alignment="CENTER" layoutX="66.0" layoutY="9.0" mnemonicParsing="false" prefWidth="125.0"
-            text="Новое судоку" textAlignment="CENTER">
+            text="Новое судоку" textAlignment="CENTER" onMouseClicked="#onCreateNewClicked">
         <font>
             <Font size="14.0"/>
         </font>
