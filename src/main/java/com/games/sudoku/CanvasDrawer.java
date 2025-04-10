@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class CanvasDrawer {
 
@@ -20,22 +21,21 @@ public class CanvasDrawer {
     }
   }
 
-  public static void fillCells(GraphicsContext context, int[][] initial, Color color) {
-    for (int row = 0; row < initial.length; row++) {
-      for (int col = 0; col < initial[row].length; col++) {
+  public static void fillCells(GraphicsContext context, int[][] board, Color color, boolean bold) {
+    context.setFont(Font.font(bold ? "System" : "Italic", bold ? FontWeight.BOLD : FontWeight.THIN, 25));
+    context.setFill(color);
 
-        int position_y = row * 50 + 30;
-        int position_x = col * 50 + 20;
-
-        context.setFill(color);
-        context.setFont(new Font(20));
-
-        if (initial[row][col] != 0) {
-          context.fillText(String.valueOf(initial[row][col]), position_x, position_y);
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        if (board[row][col] != 0) {
+          int position_y = row * 50 + 30;
+          int position_x = col * 50 + 20;
+          context.fillText(String.valueOf(board[row][col]), position_x, position_y);
         }
       }
     }
   }
+
 
   public static void drawCellBorder(GraphicsContext context, int col, int row) {
     context.setStroke(Paint.valueOf("#388e3c"));

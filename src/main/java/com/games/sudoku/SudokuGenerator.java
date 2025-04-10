@@ -1,7 +1,6 @@
 package com.games.sudoku;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class SudokuGenerator {
 
@@ -23,6 +22,55 @@ public class SudokuGenerator {
   public int[][] getSudoku() {
     return sudoku;
   }
+
+  public int[][] getPlayer() {
+    return player;
+  }
+
+  public void modifyPlayer(int val, int row, int col) {
+    if (sudoku[row][col] != 0) {
+      return;
+    }
+    if (val >= 0 && val <= 9)
+      player[row][col] = val;
+    else
+      System.out.println("Value passed to player falls out of range");
+  }
+
+  public boolean checkForSuccess() {
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        if (sudoku[row][col] == 0) {
+          if (player[row][col] != solution[row][col]) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  public int[] helpWithHint() {
+    List<int[]> coordinates = new ArrayList<>();
+
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+        if (sudoku[row][col] == 0 && player[row][col] == 0) {
+          coordinates.add(new int[]{row, col});
+        }
+      }
+    }
+    if (coordinates.isEmpty()) {
+      return null;
+    }
+    Collections.shuffle(coordinates);
+    int[] chosen = coordinates.getFirst();
+    int row = chosen[0];
+    int col = chosen[1];
+    player[row][col] = solution[row][col];
+    return chosen;
+  }
+
 
   private boolean createSolution(int[][] board) {
     for (int row = 0; row < 9; row++) {
@@ -108,33 +156,6 @@ public class SudokuGenerator {
       copy[i] = Arrays.copyOf(original[i], original[i].length);
     }
     return copy;
-  }
-
-  public int[][] getPlayer() {
-    return player;
-  }
-
-  public void modifyPlayer(int val, int row, int col) {
-    if (sudoku[row][col] != 0) {
-      return;
-    }
-    if (val >= 0 && val <= 9)
-      player[row][col] = val;
-    else
-      System.out.println("Value passed to player falls out of range");
-  }
-
-  public boolean checkForSuccess() {
-    for (int row = 0; row < 9; row++) {
-      for (int col = 0; col < 9; col++) {
-        if (sudoku[row][col] == 0) {
-          if (player[row][col] != solution[row][col]) {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
   }
 
 }

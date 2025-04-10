@@ -33,7 +33,7 @@
     </MenuButton>
     <Button fx:id="hint" alignment="CENTER" layoutX="360.0" layoutY="9.0" mnemonicParsing="false" prefWidth="125.0"
             text="Подсказка"
-            textAlignment="CENTER">
+            textAlignment="CENTER" onMouseClicked="#onHintClicked">
         <font>
             <Font size="14.0"/>
         </font>

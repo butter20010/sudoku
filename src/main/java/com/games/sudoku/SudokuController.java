@@ -47,10 +47,10 @@ public class SudokuController implements Initializable {
     GraphicsContext context = canvas.getGraphicsContext2D();
     context.clearRect(0, 0, 450, 450);
     CanvasDrawer.drawEmptyCells(context);
-    CanvasDrawer.fillCells(context, generator.getSudoku(), Color.BLACK);
+    CanvasDrawer.fillCells(context, generator.getSudoku(), Color.web("#2e7d32"), true);
     CanvasDrawer.drawCellBorder(context, player_selected_col, player_selected_row);
     CanvasDrawer.drawBlockBorders(context);
-    CanvasDrawer.fillCells(context, generator.getPlayer(), Color.PURPLE);
+    CanvasDrawer.fillCells(context, generator.getPlayer(), Color.web("#558b2f"), false);
     if (generator.checkForSuccess()) {
       CanvasDrawer.drawSuccess(context);
     }
@@ -99,6 +99,15 @@ public class SudokuController implements Initializable {
 
   public void onCreateNewClicked() {
     generator.createNewSudoku(difficulty);
+    drawOnCanvas();
+  }
+
+  public void onHintClicked() {
+    int[] hint = generator.helpWithHint();
+    if (hint != null) {
+      player_selected_row = hint[0];
+      player_selected_col = hint[1];
+    }
     drawOnCanvas();
   }
 
